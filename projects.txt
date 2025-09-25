@@ -1,0 +1,241 @@
+100+ Progressive Rust Practice Problems (up to closures)
+1. Basics (Variables, Types, Functions)
+
+Declare a mutable integer, update it, and print it. ✅
+
+Shadow a variable with a different type. ✅
+
+Write a function that returns the square of a number. ✅
+
+Write a function with multiple parameters and return their average.✅
+
+Use a constant and a static variable in a calculation. ✅
+
+Write a function that returns a tuple and destructure it in main. ✅
+
+Write a program that swaps two numbers without using a temporary variable.
+
+Implement a Celsius → Fahrenheit converter.
+
+Implement a simple is_even function.
+
+Write a recursive factorial function.
+
+
+2. Ownership & Borrowing
+
+Write a function that takes ownership of a String and prints it.
+
+Write a function that borrows a String immutably.
+
+Write a function that mutably borrows a String and appends text.
+
+Show a borrow checker error by trying to use a moved value, then fix it.
+
+Pass a large array by reference to avoid copying.
+
+Return ownership from a function.
+
+Demonstrate the difference between clone and copy.
+
+Write a function that takes a slice instead of an array.
+
+Use &str instead of String for a function argument.
+
+Implement a function that returns both the length and first character of a string slice.
+
+
+
+3. Structs
+
+Define a Point struct with x, y. Print it using {:?}.
+
+Add a method distance_from_origin(&self).
+
+Add an associated function new(x, y) -> Point.
+
+Create a Rectangle struct with top-left and bottom-right points.
+
+Add a method to calculate the rectangle’s area.
+
+Add a method to check if a point is inside the rectangle.
+
+Derive Debug and Clone for your struct.
+
+Implement Display for Point.
+
+Implement a struct with tuple fields.
+
+Use struct update syntax (..) to create a new instance.
+
+
+
+4. Enums & Pattern Matching
+
+Define an enum Direction { North, South, East, West }.
+
+Write a function that matches on a direction and prints it.
+
+Add data to the enum (e.g., Move(i32, i32)).
+
+Write an enum OptionLike with variants Some(T) and None.
+
+Use if let to check an enum variant.
+
+Use while let to pop values off a vector until empty.
+
+Write an enum ResultLike<T, E> and implement a simple division function.
+
+Use match with guards (if) inside.
+
+Use match with _ to handle a default case.
+
+Implement a basic linked list with Cons and Nil.
+
+
+
+5. Control Flow
+
+Write a loop that sums numbers from 1–100.
+
+Rewrite it using for.
+
+Use a while loop to guess a random number.
+
+Break from a loop when a condition is met.
+
+Use loop labels to break from an outer loop.
+
+Write a program that checks if a number is prime.
+
+Use a match statement instead of if-else chain.
+
+Implement fizzbuzz using match.
+
+Nest if let inside while let.
+
+Match on tuple patterns.
+
+
+
+6. Generics & Traits
+
+Write a generic function that returns the larger of two numbers.
+
+Write a generic struct Pair<T, U>.
+
+Implement a method only for Pair<T, T>.
+
+Derive Debug for a generic struct.
+
+Write a trait Shape with area() -> f64.
+
+Implement it for Circle and Rectangle.
+
+Write a trait bound (T: Debug) on a generic function.
+
+Use impl Trait for a function parameter.
+
+Write a function that returns something implementing a trait.
+
+Implement the Default trait for your struct.
+
+
+
+7. Collections
+
+Create a vector and push/pop elements.
+
+Iterate with for over a vector.
+
+Use .iter().enumerate().
+
+Mutably iterate and modify values.
+
+Collect an iterator into a vector.
+
+Use a HashMap to count word frequency.
+
+Use .entry().or_insert() to simplify counting.
+
+Remove elements from a vector with retain.
+
+Use .get() safely on a vector.
+
+Iterate over a HashMap.
+
+
+
+8. Error Handling
+
+Write a function that returns Result for division.
+
+Use unwrap and show how it panics.
+
+Replace it with unwrap_or.
+
+Replace it with unwrap_or_else using a closure.
+
+Use ? operator to propagate errors.
+
+Write a custom error type with enum.
+
+Use panic! explicitly.
+
+Convert Option to Result.
+
+Handle errors with match.
+
+Handle multiple different errors in one function.
+
+
+
+9. Modules & Crates
+
+Create a mod utils with a helper function.
+
+Use pub fn to expose it.
+
+Use super:: to access parent modules.
+
+Split code into multiple files (mod.rs).
+
+Create a library crate with cargo new --lib.
+
+Use an external crate (like rand).
+
+Re-export something with pub use.
+
+Use a private helper function inside a public API.
+
+Create a constant inside a module.
+
+Organize code with nested modules.
+
+
+
+10. Closures (just arriving at them)
+
+Write a closure that doubles a number.
+
+Pass a closure to a function.
+
+Store a closure in a variable.
+
+Write a closure that captures a variable from the environment.
+
+Write a mutable closure that modifies a captured variable.
+
+Write a move closure.
+
+Write a function that takes an Fn closure.
+
+Write a function that takes an FnMut closure.
+
+Write a function that takes an FnOnce closure.
+
+Use a closure with .map() on a vector.
+
+Use .filter() with a closure.
+
+Use .fold() with a closure.
