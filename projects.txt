@@ -15,9 +15,9 @@ Write a function that returns a tuple and destructure it in main. ✅
 
 Write a program that swaps two numbers without using a temporary variable. ✅
 
-Implement a Celsius → Fahrenheit converter.
+Implement a Celsius → Fahrenheit converter. ✅
 
-Implement a simple is_even function.
+Implement a simple is_even function. ✅
 
 Write a recursive factorial function.
 
