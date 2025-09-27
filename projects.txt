@@ -19,7 +19,7 @@ Implement a Celsius → Fahrenheit converter. ✅
 
 Implement a simple is_even function. ✅
 
-Write a recursive factorial function.
+Write a recursive factorial function. ✅
 
 
 2. Ownership & Borrowing
