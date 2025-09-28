@@ -32,17 +32,17 @@ Write a function that mutably borrows a String and appends text. ✅
 
 Show a borrow checker error by trying to use a moved value, then fix it. ✅
 
-Pass a large array by reference to avoid copying.
+Pass a large array by reference to avoid copying. ✅
 
-Return ownership from a function.
+Return ownership from a function.  ✅
 
-Demonstrate the difference between clone and copy.
+Demonstrate the difference between clone and copy. ✅
 
-Write a function that takes a slice instead of an array.
+Write a function that takes a slice instead of an array. ✅
 
-Use &str instead of String for a function argument.
+Use &str instead of String for a function argument. ✅
 
-Implement a function that returns both the length and first character of a string slice.
+Implement a function that returns both the length and first character of a string slice. ✅
 
 
 
