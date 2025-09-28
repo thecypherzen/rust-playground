@@ -24,13 +24,13 @@ Write a recursive factorial function. ✅
 
 2. Ownership & Borrowing
 
-Write a function that takes ownership of a String and prints it.
+Write a function that takes ownership of a String and prints it. ✅
 
-Write a function that borrows a String immutably.
+Write a function that borrows a String immutably. ✅
 
-Write a function that mutably borrows a String and appends text.
+Write a function that mutably borrows a String and appends text. ✅
 
-Show a borrow checker error by trying to use a moved value, then fix it.
+Show a borrow checker error by trying to use a moved value, then fix it. ✅
 
 Pass a large array by reference to avoid copying.
 
