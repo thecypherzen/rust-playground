@@ -1,5 +1,11 @@
 // a struct with x & y props
-#[allow(dead_code)]
+#![allow(dead_code)]
+
+fn to_precision<T: Into<f64>>(n:T, p: u32) -> f64 {
+	let factor = 10i32.pow(p) as f64;
+	(n.into() * factor).round() / factor
+}
+
 #[derive(Debug)]
 struct Point {
 	x: f64, y: f64
@@ -11,23 +17,20 @@ impl Point {
 	}
 }
 
+// Point Generation Macro
 macro_rules! point {
-	() => {Vec::<Point>::new()};
-	(
-		{x: $x:expr, y: $y:expr}$(,$($rest:tt)*)?
-	) => {{
-		let mut vect = Vec::<Point>::new();
-		vect.push(Point::new($x, $y));
-		vect.extend(point!($($($rest)*)?));
-		vect
+	() => { Vec::<Point>::new() };
+	({x: $x:expr, y: $y:expr}$(, $($rest:tt)*)?) => {{
+		let mut v = Vec::<Point>::new();
+		v.push(Point::new(to_precision($x, 2), to_precision($y, 2)));
+		v.extend(point!($($($rest)*)?));
+		v
 	}};
-	(
-		{y: $y:expr, x: $x:expr}$(,$($rest:tt)*)?
-	) => {{
-		let mut v2 = Vec::<Point>::new();
-		v2.push(Point::new($x, $y));
-		v2.extend(point!($($($rest)*)?));
-		v2
+	({y: $y:expr, x: $x:expr}$(, $($rest:tt)*)?) => {{
+		let mut v = Vec::<Point>::new();
+		v.push(Point::new(to_precision($x, 2), to_precision($y, 2)));
+		v.extend(point!($($($rest)*)?));
+		v
 	}};
 }
 
