@@ -44,19 +44,17 @@ Use &str instead of String for a function argument. ✅
 
 Implement a function that returns both the length and first character of a string slice. ✅
 
-
-
 3. Structs
 
-Define a Point struct with x, y. Print it using {:?}.
+Define a Point struct with x, y. Print it using {:?}. ✅
 
-Add a method distance_from_origin(&self).
+Add a method distance_from_origin(&self). ✅
 
-Add an associated function new(x, y) -> Point.
+Add an associated function new(x, y) -> Point. ✅
 
-Create a Rectangle struct with top-left and bottom-right points.
+Create a Rectangle struct with top-left and bottom-right points. ✅
 
-Add a method to calculate the rectangle’s area.
+Add a method to calculate the rectangle’s area. ✅
 
 Add a method to check if a point is inside the rectangle.
 
