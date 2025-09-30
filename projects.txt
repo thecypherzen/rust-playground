@@ -56,11 +56,11 @@ Create a Rectangle struct with top-left and bottom-right points. ✅
 
 Add a method to calculate the rectangle’s area. ✅
 
-Add a method to check if a point is inside the rectangle.
+Add a method to check if a point is inside the rectangle. ✅
 
-Derive Debug and Clone for your struct.
+Derive Debug and Clone for your struct. ✅
 
-Implement Display for Point.
+Implement Display for Point. ✅
 
 Implement a struct with tuple fields.
 

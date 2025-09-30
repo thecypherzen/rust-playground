@@ -1,5 +1,6 @@
-// a struct with x & y props
 #![allow(dead_code)]
+
+use std::fmt::{Display, Formatter, Result};
 
 /**
  * to_precision: a function that rounds a float to specified
@@ -9,7 +10,7 @@ fn to_precision<T: Into<f64>>(n:T, p:u32) -> f64 {
 	let factor = 10i32.pow(p) as f64;
 	(n.into() * factor).round() / factor
 }
-
+// a struct with x & y props
 // define Point struct
 #[derive(Debug, Clone, Copy)]
 struct Point {
@@ -33,15 +34,26 @@ impl Point {
 	}
 }
 
+// display
+impl Display for Point {
+	fn fmt(&self, f: &mut Formatter) -> Result {
+		write!(f, "P({}, {})", self.x, self.y)
+	}
+}
+
 /**
  * Rectangle Struct
  */
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Rectangle {
 	tl: Point,
 	br: Point
 }
-
+impl Display for Rectangle {
+	fn fmt(&self, f: &mut Formatter) -> Result {
+		write!(f, "R{{tl: {}, br: {}}}", self.tl, self.br)
+	}
+}
 impl Rectangle {
 	// constructor
 	fn new(tl: Point, br: Point) -> Rectangle {
@@ -56,6 +68,12 @@ impl Rectangle {
 
 	fn breadth(&self) -> f64 {
 		self.width()
+	}
+
+	fn point_is_within(&self, p: Point) -> bool {
+		let (xmin, xmax) = (self.tl.x.min(self.br.x), self.tl.x.max(self.br.x));
+		let (ymin, ymax) = (self.tl.y.min(self.br.y), self.tl.y.max(self.br.y));
+		p.x >= xmin && p.x <= xmax && p.y >= ymin && p.y <= ymax
 	}
 
 	fn length(&self) -> f64 {
@@ -89,6 +107,8 @@ fn main() {
 		let [p1, p2, rest @..] = points.as_slice() else { todo!() };
 		let rect1 = Rectangle::new(*p1, *p2);
 		let rect2 = Rectangle::new(rest[0], rest[1]);
-		println!("Rectangle: {:?}, Area = L: {} x B: {} = {}", rect1, rect1.length(), rect1.breadth(), rect1.area(Some(3)));
-		println!("Rectangle: {:?}, Area = L: {} x B: {} = {}", rect2, rect2.length(), rect2.breadth(), rect2.area(None));
+		println!("Rectangle: {}, Area = L: {} x B: {} = {}", rect1, rect1.length(), rect1.breadth(), rect1.area(Some(3)));
+		println!("Rectangle: {}, Area = L: {} x B: {} = {}", rect2, rect2.length(), rect2.breadth(), rect2.area(None));
+		println!("{} is within {} ? {}", Point {x:15f64, y:1.5f64}, rect1, rect1.point_is_within(Point { x: 15.0f64, y: 1.5f64}));
+		println!("{} is within {} ? {}", Point {x: 12f64, y: 3f64}, rect1, rect1.point_is_within(Point { x: 3f64, y: 2f64}));
 }
