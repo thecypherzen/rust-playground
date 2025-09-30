@@ -82,13 +82,13 @@ Use if let to check an enum variant. ✅
 
 Use while let to pop values off a vector until empty. ✅
 
-Write an enum ResultLike<T, E> and implement a simple division function.
+Write an enum ResultLike<T, E> and implement a simple division function. ✅
 
-Use match with guards (if) inside.
+Use match with guards (if) inside. ✅
 
-Use match with _ to handle a default case.
+Use match with _ to handle a default case. ✅
 
-Implement a basic linked list with Cons and Nil.
+Implement a basic linked list with Cons and Nil. ✅
 
 
 
