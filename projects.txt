@@ -70,17 +70,17 @@ Use struct update syntax (..) to create a new instance. ✅
 
 4. Enums & Pattern Matching
 
-Define an enum Direction { North, South, East, West }.
+Define an enum Direction { North, South, East, West }. ✅
 
-Write a function that matches on a direction and prints it.
+Write a function that matches on a direction and prints it. ✅
 
-Add data to the enum (e.g., Move(i32, i32)).
+Add data to the enum (e.g., Move(i32, i32)). ✅
 
-Write an enum OptionLike with variants Some(T) and None.
+Write an enum OptionLike with variants Some(T) and None. ✅
 
-Use if let to check an enum variant.
+Use if let to check an enum variant. ✅
 
-Use while let to pop values off a vector until empty.
+Use while let to pop values off a vector until empty. ✅
 
 Write an enum ResultLike<T, E> and implement a simple division function.
 
