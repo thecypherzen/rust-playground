@@ -62,9 +62,9 @@ Derive Debug and Clone for your struct. ✅
 
 Implement Display for Point. ✅
 
-Implement a struct with tuple fields.
+Implement a struct with tuple fields. ✅
 
-Use struct update syntax (..) to create a new instance.
+Use struct update syntax (..) to create a new instance. ✅
 
 
 

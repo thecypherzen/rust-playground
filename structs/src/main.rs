@@ -44,7 +44,7 @@ impl Display for Point {
 /**
  * Rectangle Struct
  */
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 struct Rectangle {
 	tl: Point,
 	br: Point
@@ -107,8 +107,10 @@ fn main() {
 		let [p1, p2, rest @..] = points.as_slice() else { todo!() };
 		let rect1 = Rectangle::new(*p1, *p2);
 		let rect2 = Rectangle::new(rest[0], rest[1]);
+		let rect3 = Rectangle { tl: Point::new(15, 10), ..rect1};
 		println!("Rectangle: {}, Area = L: {} x B: {} = {}", rect1, rect1.length(), rect1.breadth(), rect1.area(Some(3)));
 		println!("Rectangle: {}, Area = L: {} x B: {} = {}", rect2, rect2.length(), rect2.breadth(), rect2.area(None));
 		println!("{} is within {} ? {}", Point {x:15f64, y:1.5f64}, rect1, rect1.point_is_within(Point { x: 15.0f64, y: 1.5f64}));
 		println!("{} is within {} ? {}", Point {x: 12f64, y: 3f64}, rect1, rect1.point_is_within(Point { x: 3f64, y: 2f64}));
+		println!("Rect3: {}\nRect1: {}", rect3, rect1);
 }
