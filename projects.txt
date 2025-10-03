@@ -94,15 +94,15 @@ Implement a basic linked list with Cons and Nil. ✅
 
 5. Control Flow
 
-Write a loop that sums numbers from 1–100.
+Write a loop that sums numbers from 1–100. ✅
 
-Rewrite it using for.
+Rewrite it using for. ✅
 
 Use a while loop to guess a random number.
 
-Break from a loop when a condition is met.
+Break from a loop when a condition is met. ✅
 
-Use loop labels to break from an outer loop.
+Use loop labels to break from an outer loop. ✅
 
 Write a program that checks if a number is prime.
 
