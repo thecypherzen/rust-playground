@@ -108,11 +108,11 @@ Write a program that checks if a number is prime. ✅
 
 Use a match statement instead of if-else chain. ✅
 
-Implement fizzbuzz using match.
+Implement fizzbuzz using match. ✅
 
-Nest if let inside while let.
+Nest if let inside while let. ✅
 
-Match on tuple patterns.
+Match on tuple patterns. ✅
 
 
 
