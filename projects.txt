@@ -106,7 +106,7 @@ Use loop labels to break from an outer loop. ✅
 
 Write a program that checks if a number is prime. ✅
 
-Use a match statement instead of if-else chain.
+Use a match statement instead of if-else chain. ✅
 
 Implement fizzbuzz using match.
 

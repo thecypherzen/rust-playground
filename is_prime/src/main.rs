@@ -29,7 +29,10 @@ fn main() {
 		// convert value to number
 		let num: i64 = val.trim().parse().unwrap();
 		let res = is_prime(num.unsigned_abs());
-		let suffix = format!("is{}", if res { String::new()} else { String::from(" not")});
+		let suffix = format!("is{}", match res {
+			true => String::new(),
+			false => String::from(" not")
+		});
 		println!("    {} {} prime.", num, suffix);
 	}
 }
