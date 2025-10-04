@@ -118,7 +118,7 @@ Match on tuple patterns.
 
 6. Generics & Traits
 
-Write a generic function that returns the larger of two numbers.
+Write a generic function that returns the larger of two numbers. ✅
 
 Write a generic struct Pair<T, U>.
 
