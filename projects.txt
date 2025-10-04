@@ -104,7 +104,7 @@ Break from a loop when a condition is met. ✅
 
 Use loop labels to break from an outer loop. ✅
 
-Write a program that checks if a number is prime.
+Write a program that checks if a number is prime. ✅
 
 Use a match statement instead of if-else chain.
 
