@@ -3,7 +3,8 @@ pub trait Shape {
 	fn area(&self) -> f64;
 	fn perimeter(&self) -> f64;
 	fn name(&self) -> &str {
-		std::any::type_name::<Self>()
+		let name = std::any::type_name::<Self>();
+		name.rsplit("::").next().unwrap_or("<Unknown Shape>")
 	}
 }
 
@@ -17,6 +18,19 @@ pub struct Rectangle {
 pub struct Circle {
 	pub center: Point,
 	pub radius: f64
+}
+
+impl Circle {
+	pub fn new(center: Point, radius: f64) -> Circle {
+		Circle { center, radius }
+	}
+
+}
+
+impl Rectangle {
+	pub fn new(tl: Point, br: Point) -> Rectangle {
+		Rectangle { tl, br }
+	}
 }
 
 impl Shape for Circle {

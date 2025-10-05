@@ -134,7 +134,7 @@ Write a trait bound (T: Debug) on a generic function. ✅
 
 Use impl Trait for a function parameter. ✅
 
-Write a function that returns something implementing a trait.
+Write a function that returns something implementing a trait. ✅
 
 Implement the Default trait for your struct. ✅
 

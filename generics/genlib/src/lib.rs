@@ -8,6 +8,5 @@ pub fn debug<T: Debug>(item: &T) {
 }
 
 pub fn describe(shape: &impl shapes::Shape) {
-	let name = shape.name().rsplit("::").next().unwrap_or("<Unknown Shape>");
-	println!("[{} - Area: {}, Perimeter: {}]", name , shape.area(), shape.perimeter());
+	println!("[{} - Area: {}, Perimeter: {}]", shape.name() , shape.area(), shape.perimeter());
 }
