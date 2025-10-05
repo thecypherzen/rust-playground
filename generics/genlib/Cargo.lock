@@ -3,12 +3,5 @@
 version = 4
 
 [[package]]
-name = "generics"
-version = "0.1.0"
-dependencies = [
- "genlib",
-]
-
-[[package]]
 name = "genlib"
 version = "0.1.0"

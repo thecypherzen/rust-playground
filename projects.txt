@@ -120,23 +120,23 @@ Match on tuple patterns. ✅
 
 Write a generic function that returns the larger of two numbers. ✅
 
-Write a generic struct Pair<T, U>.
+Write a generic struct Pair<T, U>. ✅
 
-Implement a method only for Pair<T, T>.
+Implement a method only for Pair<T, T>. ✅
 
-Derive Debug for a generic struct.
+Derive Debug for a generic struct. ✅
 
-Write a trait Shape with area() -> f64.
+Write a trait Shape with area() -> f64. ✅
 
-Implement it for Circle and Rectangle.
+Implement it for Circle and Rectangle. ✅
 
-Write a trait bound (T: Debug) on a generic function.
+Write a trait bound (T: Debug) on a generic function. ✅
 
-Use impl Trait for a function parameter.
+Use impl Trait for a function parameter. ✅
 
 Write a function that returns something implementing a trait.
 
-Implement the Default trait for your struct.
+Implement the Default trait for your struct. ✅
 
 
 

@@ -1,4 +1,7 @@
 use std::cmp::{PartialOrd};
+use genlib::shapes::{Rectangle};
+use genlib::point::Point;
+use genlib::{describe, debug};
 
 fn is_larger<T: PartialOrd>(x: T, y: T) -> T {
 	if x > y {
@@ -6,6 +9,7 @@ fn is_larger<T: PartialOrd>(x: T, y: T) -> T {
 	}
 	y
 }
+
 
 fn main() {
 		println!("----------- IS GREATER -----------");
@@ -21,4 +25,8 @@ fn main() {
 			i += 1;
 			println!("{} vs {}:\t✔︎ {} is larger", c.0, c.1, is_larger(c.0, c.1));
 		}
+		println!("\n----------- GENERICS -----------");
+		let rect1 = Rectangle { tl: Point::new(1.0, 2.0), br: Point::new(4.5, 6.7) };
+		describe(&rect1);
+		debug(&rect1);
 }
