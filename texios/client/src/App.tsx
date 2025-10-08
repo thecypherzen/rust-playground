@@ -11,21 +11,78 @@ import {
 } from "./components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FileSelect } from "./components/FileSelect";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
+import { Spinner } from "./components/ui/spinner";
 
 function App() {
   const [analysisResult, setAnalysisResult] = useState<TextAnalysisRes | null>(
     null
   );
+  const [wordFrequencies, setWordFrequencies] =
+    useState<WordFreqPlotDataType | null>(null);
+  const [plotLimit, _] = useState<number>(7);
+  const [isAnalysing, setIsAnalysing] = useState<boolean>(false);
+  const [isPlotting, setIsPlotting] = useState<boolean>(false);
+  const textAnalyse = useCallback(
+    async (text: string): Promise<TextAnalysisRes> => {
+      setIsAnalysing(true);
+      const frequencies: Record<string, number> = {};
+      const positions: Record<string, number[]> = {};
+      const stats = {} as {
+        word_count: number;
+        char_count: number;
+      };
+
+      const re = /[a-zA-Z]+\b/g;
+      let res = text.match(re);
+
+      res?.map((w, index) => {
+        const word = w.toLowerCase();
+        const v = positions[word] ?? [];
+        v.push(index);
+        positions[word] = v;
+        frequencies[word] = (frequencies[word] ?? 0) + 1;
+      });
+      stats.word_count = res!.length;
+      stats.char_count = text.length;
+      setTimeout(() => {
+        setIsAnalysing(false);
+      }, 3000);
+      return {
+        word_pos: positions,
+        word_freqs: frequencies,
+        stats,
+      };
+    },
+    []
+  );
+  const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
-    console.log("analysis result:", analysisResult);
+    if (!analysisResult) return;
+    let arr: WordFreqPlotDataType = Object.entries(analysisResult.word_freqs)
+      .sort((a, b) => b[1] - a[1])
+      .map(([word, f]) => {
+        return { word, f };
+      })
+      .slice(0, plotLimit);
+    setWordFrequencies(arr);
   }, [analysisResult]);
+
+  useEffect(() => {}, [wordFrequencies, isAnalysing, isPlotting]);
 
   return (
     <div className="m-auto flex h-screen flex-col items-center justify-center p-3">
-      <Card className="min-h-3/4 w-full md:w-2/3 lg:w-1/2 shadow-none gap-2">
+      <Card className="min-h-3/4 w-full md:w-2/3 lg:w-1/2 shadow-none gap-2 overflow-y-auto">
         <CardHeader className="border-b-1 border-gray-200 flex gap-3 items-center pt-2 pb-3">
           <div className="rounded-full h-full w-auto aspect-square p-2 flex flex-col items-center justify-center border-1 border-neutral-200">
             <CloudUpload />
@@ -48,10 +105,17 @@ function App() {
                   console.error(err);
                 });
             }}
+            file={file}
+            setFile={setFile}
+            isProcessing={isAnalysing || isPlotting}
           />
         </CardContent>
         {/* Uploaded Content */}
-        <CardFooter className="flex flex-col gap-1"></CardFooter>
+        <CardFooter className="flex flex-col gap-1 mt-5">
+          {file && wordFrequencies && (
+            <WordFrequencyPlot data={wordFrequencies} />
+          )}
+        </CardFooter>
       </Card>
     </div>
   );
@@ -75,34 +139,6 @@ function ProgressBar() {
     };
   }, []);
   return <Progress value={progress} className="" />;
-}
-
-async function textAnalyse(text: string): Promise<TextAnalysisRes> {
-  const frequencies: Record<string, number> = {};
-  const positions: Record<string, number[]> = {};
-  const stats = {} as {
-    word_count: number;
-    char_count: number;
-  };
-
-  const re = /\w+/g;
-  let res = text.match(re);
-
-  res?.map((w, index) => {
-    const word = w.toLowerCase();
-    const v = positions[word] ?? [];
-    v.push(index);
-    positions[word] = v;
-    frequencies[word] = (frequencies[word] ?? 0) + 1;
-  });
-  stats.word_count = res!.length;
-  stats.char_count = text.length;
-
-  return {
-    word_pos: positions,
-    word_freqs: frequencies,
-    stats,
-  };
 }
 
 export function UplodedState() {
@@ -168,6 +204,21 @@ export function UploadingState() {
   );
 }
 
+function WordFrequencyPlot({ data }: { data: WordFreqPlotDataType }) {
+  return (
+    <div className="w-full min-h-[300px] border-1 border-neutral-200 p-5 bg-gray-100 rounded-xl">
+      <ResponsiveContainer>
+        <BarChart data={data}>
+          <XAxis dataKey={"word"} />
+          <YAxis />
+          <Tooltip />
+          <Bar dataKey={"f"} fill="#0f52ba" />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
 export type TextAnalysisRes = {
   word_pos: Record<string, number[]>;
   word_freqs: Record<string, number>;
@@ -176,5 +227,10 @@ export type TextAnalysisRes = {
     char_count: number;
   };
 };
+
+type WordFreqPlotDataType = {
+  word: string;
+  f: number;
+}[];
 
 export default App;

@@ -12,10 +12,16 @@ type SizeUnit = "GB" | "KB" | "MB";
 
 export function FileSelect({
   analyseText,
+  isProcessing,
+  file,
+  setFile,
 }: {
   analyseText: (t: string) => void;
+  isProcessing: boolean;
+  file: File | null;
+  setFile: React.Dispatch<React.SetStateAction<File | null>>;
 }) {
-  const [file, setFile] = useState<File | null>(null);
+  console.log("isprocessing:", isProcessing);
   const [fileText, setFileText] = useState<string | null>(null);
   const [error, setError] = useState<{ type: string; message: string } | null>(
     null
@@ -52,11 +58,6 @@ export function FileSelect({
       }
     }
   }, [file]);
-
-  useEffect(() => {
-    console.log("file Text:", fileText);
-    analyseText("This is a test");
-  }, [fileText]);
 
   useEffect(() => {
     console.log("error:", error);
@@ -111,10 +112,13 @@ export function FileSelect({
             size="sm"
             className="mt-3 cursor-pointer flex items-center gap-1"
             onClick={() => {
-              console.log("Uploading file...");
+              if (fileText) {
+                analyseText(fileText);
+              }
             }}
+            disabled={isProcessing}
           >
-            <Spinner className="size-4" />
+            {isProcessing && <Spinner className="size-4" />}
             Analyse
           </Button>
         )}
