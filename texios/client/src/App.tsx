@@ -20,8 +20,9 @@ import {
   YAxis,
   ResponsiveContainer,
   Tooltip,
+  Label,
 } from "recharts";
-import { Spinner } from "./components/ui/spinner";
+//import { Spinner } from "./components/ui/spinner";
 
 function App() {
   const [analysisResult, setAnalysisResult] = useState<TextAnalysisRes | null>(
@@ -31,7 +32,8 @@ function App() {
     useState<WordFreqPlotDataType | null>(null);
   const [plotLimit, _] = useState<number>(7);
   const [isAnalysing, setIsAnalysing] = useState<boolean>(false);
-  const [isPlotting, setIsPlotting] = useState<boolean>(false);
+  const [isPlotting] = useState<boolean>(false);
+  // text analyser
   const textAnalyse = useCallback(
     async (text: string): Promise<TextAnalysisRes> => {
       setIsAnalysing(true);
@@ -206,11 +208,23 @@ export function UploadingState() {
 
 function WordFrequencyPlot({ data }: { data: WordFreqPlotDataType }) {
   return (
-    <div className="w-full min-h-[300px] border-1 border-neutral-200 p-5 bg-gray-100 rounded-xl">
-      <ResponsiveContainer>
-        <BarChart data={data}>
-          <XAxis dataKey={"word"} />
-          <YAxis />
+    <div className="w-full min-h-[300px] border-1 border-neutral-200 p-5 bg-gray-100 rounded-xl overflow-auto">
+      <ResponsiveContainer className="p-4">
+        <BarChart data={data} margin={{ bottom: 18 }} className="p-2">
+          <XAxis
+            dataKey={"word"}
+            label={{ value: "Words", position: "insideBottom", offset: -18 }}
+            className="text-sm"
+          />
+          <YAxis className="text-sm">
+            <Label
+              value="Count"
+              angle={-90}
+              offset={10}
+              position="insideLeft"
+              style={{ textAnchor: "middle", fill: "#777" }}
+            />
+          </YAxis>
           <Tooltip />
           <Bar dataKey={"f"} fill="#0f52ba" />
         </BarChart>
