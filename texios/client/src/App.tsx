@@ -22,7 +22,7 @@ import {
   Tooltip,
   Label,
 } from "recharts";
-//import { Spinner } from "./components/ui/spinner";
+//import { analyse } from "./pkg/text_analyser";
 
 function App() {
   const [analysisResult, setAnalysisResult] = useState<TextAnalysisRes | null>(
@@ -37,6 +37,8 @@ function App() {
   const textAnalyse = useCallback(
     async (text: string): Promise<TextAnalysisRes> => {
       setIsAnalysing(true);
+      //const result = analyse(text);
+      //console.log("analysis result", result);
       const frequencies: Record<string, number> = {};
       const positions: Record<string, number[]> = {};
       const stats = {} as {
@@ -83,43 +85,44 @@ function App() {
   useEffect(() => {}, [wordFrequencies, isAnalysing, isPlotting]);
 
   return (
-    <div className="m-auto flex h-screen flex-col items-center justify-center p-3">
-      <Card className="min-h-3/4 w-full md:w-2/3 lg:w-1/2 shadow-none gap-2 overflow-y-auto">
-        <CardHeader className="border-b-1 border-gray-200 flex gap-3 items-center pt-2 pb-3">
-          <div className="rounded-full h-full w-auto aspect-square p-2 flex flex-col items-center justify-center border-1 border-neutral-200">
-            <CloudUpload />
-          </div>
-          <div>
-            <CardTitle className="text-xl font-medium">Texios</CardTitle>
-            <CardDescription className="text-gray-400 text-md font-light">
-              Select or upload file to analyse
-            </CardDescription>
-          </div>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4 border-0 border-neutral-300 flex-1 pt-5">
-          <FileSelect
-            analyseText={(t: string) => {
-              textAnalyse(t)
-                .then((res) => {
-                  setAnalysisResult(res);
-                })
-                .catch((err: any) => {
-                  console.error(err);
-                });
-            }}
-            file={file}
-            setFile={setFile}
-            isProcessing={isAnalysing || isPlotting}
-          />
-        </CardContent>
-        {/* Uploaded Content */}
-        <CardFooter className="flex flex-col gap-1 mt-5">
-          {file && wordFrequencies && (
-            <WordFrequencyPlot data={wordFrequencies} />
-          )}
-        </CardFooter>
-      </Card>
-    </div>
+    <div className="w-full min-h-screen bg-gray-950"></div>
+    //<div className="m-auto flex h-screen flex-col items-center justify-center p-3">
+    //  <Card className="min-h-3/4 w-full md:w-2/3 lg:w-1/2 shadow-none gap-2 overflow-y-auto">
+    //    <CardHeader className="border-b-1 border-gray-200 flex gap-3 items-center pt-2 pb-3">
+    //      <div className="rounded-full h-full w-auto aspect-square p-2 flex flex-col items-center justify-center border-1 border-neutral-200">
+    //        <CloudUpload />
+    //      </div>
+    //      <div>
+    //        <CardTitle className="text-xl font-medium">Texios</CardTitle>
+    //        <CardDescription className="text-gray-400 text-md font-light">
+    //          Select or upload file to analyse
+    //        </CardDescription>
+    //      </div>
+    //    </CardHeader>
+    //    <CardContent className="flex flex-col gap-4 border-0 border-neutral-300 flex-1 pt-5">
+    //      <FileSelect
+    //        analyseText={(t: string) => {
+    //          textAnalyse(t)
+    //            .then((res) => {
+    //              setAnalysisResult(res);
+    //            })
+    //            .catch((err: any) => {
+    //              console.error(err);
+    //            });
+    //        }}
+    //        file={file}
+    //        setFile={setFile}
+    //        isProcessing={isAnalysing || isPlotting}
+    //      />
+    //    </CardContent>
+    //    {/* Uploaded Content */}
+    //    <CardFooter className="flex flex-col gap-1 mt-5">
+    //      {file && wordFrequencies && (
+    //        <WordFrequencyPlot data={wordFrequencies} />
+    //      )}
+    //    </CardFooter>
+    //  </Card>
+    //</div>
   );
 }
 

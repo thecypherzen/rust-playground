@@ -1,0 +1,22 @@
+{
+  "name": "text_analyser",
+  "type": "module",
+  "collaborators": [
+    "William Inyam <sw.inyam@outlook.com>"
+  ],
+  "description": "A simple text analyser",
+  "version": "0.1.0",
+  "license": "MIT",
+  "files": [
+    "text_analyser_bg.wasm",
+    "text_analyser.js",
+    "text_analyser_bg.js",
+    "text_analyser.d.ts"
+  ],
+  "main": "text_analyser.js",
+  "types": "text_analyser.d.ts",
+  "sideEffects": [
+    "./text_analyser.js",
+    "./snippets/*"
+  ]
+}

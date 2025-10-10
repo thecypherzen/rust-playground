@@ -64,7 +64,7 @@ export function FileSelect({
   }, [error?.type, error?.message]);
 
   return (
-    <div className="flex flex-col gap-3 justify-center items-center border-1 border-dashed border-gray-300 rounded-lg p-6 flex-grow flex-3/4">
+    <div className="flex flex-col gap-3 justify-center items-center border-3 border-dashed border-blue-500 rounded-lg p-6 flex-grow flex-3/4">
       {!file && <Empty />}
       {/* File Preview */}
       {file && (

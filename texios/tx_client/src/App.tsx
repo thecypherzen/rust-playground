@@ -22,7 +22,7 @@ import {
   Tooltip,
   Label,
 } from "recharts";
-//import { analyse } from "./pkg/text_analyser";
+import { analyse } from "./pkg/text_analyser";
 
 function App() {
   const [analysisResult, setAnalysisResult] = useState<TextAnalysisRes | null>(
@@ -37,33 +37,19 @@ function App() {
   const textAnalyse = useCallback(
     async (text: string): Promise<TextAnalysisRes> => {
       setIsAnalysing(true);
-      //const result = analyse(text);
-      //console.log("analysis result", result);
-      const frequencies: Record<string, number> = {};
-      const positions: Record<string, number[]> = {};
-      const stats = {} as {
-        word_count: number;
-        char_count: number;
-      };
-
-      const re = /[a-zA-Z]+\b/g;
-      let res = text.match(re);
-
-      res?.map((w, index) => {
-        const word = w.toLowerCase();
-        const v = positions[word] ?? [];
-        v.push(index);
-        positions[word] = v;
-        frequencies[word] = (frequencies[word] ?? 0) + 1;
-      });
-      stats.word_count = res!.length;
-      stats.char_count = text.length;
+      const result = analyse(text) as WasmResultValue;
+      //console.log("wasm analysis result", result);
+      const wFreqs: WordFreqArray = Array.from(
+        result.get("word_freqs") ?? new Map()
+      ).sort((a, b) => b[1] - a[1]);
+      const wPos = (result.get("word_pos") ?? new Map()) as WordPosMap;
+      const stats = (result.get("stats") ?? new Map()) as StatsMap;
       setTimeout(() => {
         setIsAnalysing(false);
       }, 3000);
       return {
-        word_pos: positions,
-        word_freqs: frequencies,
+        word_pos: wPos,
+        word_freqs: wFreqs,
         stats,
       };
     },
@@ -73,12 +59,11 @@ function App() {
 
   useEffect(() => {
     if (!file || !analysisResult) return;
-    let arr: WordFreqPlotDataType = Object.entries(analysisResult.word_freqs)
-      .sort((a, b) => b[1] - a[1])
+    let arr: WordFreqPlotDataType = analysisResult.word_freqs
+      .slice(0, plotLimit)
       .map(([word, f]) => {
         return { word, f };
-      })
-      .slice(0, plotLimit);
+      });
     setWordFrequencies(arr);
   }, [analysisResult, file]);
 
@@ -238,13 +223,18 @@ function WordFrequencyPlot({ data }: { data: WordFreqPlotDataType }) {
 }
 
 export type TextAnalysisRes = {
-  word_pos: Record<string, number[]>;
-  word_freqs: Record<string, number>;
-  stats: {
-    word_count: number;
-    char_count: number;
-  };
+  word_pos: WordPosMap;
+  word_freqs: WordFreqArray;
+  stats: StatsMap;
 };
+
+type WasmResultKey = "word_pos" | "stats" | "word_freqs";
+type WasmStatsKey = "word_count" | "char_count";
+type WordFreqMap = Map<string, number>;
+type WordFreqArray = [string, number][];
+type StatsMap = Map<WasmStatsKey, number>;
+type WordPosMap = Map<string, Array<number>>;
+type WasmResultValue = Map<WasmResultKey, WordFreqMap | StatsMap | WordPosMap>;
 
 type WordFreqPlotDataType = {
   word: string;
