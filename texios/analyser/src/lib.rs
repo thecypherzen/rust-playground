@@ -19,7 +19,7 @@ pub fn analyse_native(text: &str) -> AnalysisResult {
 	let mut statistics: HashMap<String, usize> = HashMap::new();
 
 	// generate stats
-	let reg_matches: Vec<_> = Regex::new(r"\w+")
+	let reg_matches: Vec<_> = Regex::new(r"[A-Za-z_][A-Za-z0-9_.@-]*")
 	.unwrap()
 	.find_iter(text)
 	.collect();
