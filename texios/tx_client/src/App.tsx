@@ -86,20 +86,7 @@ function App() {
           </div>
         </CardHeader>
         <CardContent className="flex flex-col gap-4 border-0 border-neutral-300 flex-1 pt-5">
-          <FileSelect
-            analyseText={(t: string) => {
-              textAnalyse(t)
-                .then((res) => {
-                  setAnalysisResult(res);
-                })
-                .catch((err: any) => {
-                  console.error(err);
-                });
-            }}
-            file={file}
-            setFile={setFile}
-            isProcessing={isAnalysing || isPlotting}
-          />
+          <FileSelect />
         </CardContent>
         {/* Uploaded Content */}
         <CardFooter className="flex flex-col gap-1 mt-5">

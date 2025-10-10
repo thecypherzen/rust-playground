@@ -58,6 +58,7 @@ export function FileAnalysisProvider({
    */
   const readFileText = useCallback(async () => {
     if (!file) return;
+    console.log("reading file");
     setIsReadingFile(true);
     const timeout = setTimeout(() => {
       const fileReader = new FileReader();
@@ -79,15 +80,20 @@ export function FileAnalysisProvider({
       setIsReadingFile(false);
     }, 1000);
     return () => clearTimeout(timeout);
-  }, []);
+  }, [file]);
 
   const handleFileAnalysis = () => {
-    if (!fileContent?.text) return;
+    console.log("file analysis called");
+    if (!fileContent?.text) {
+      console.error("no file? ", !!file, "\n\tno file content");
+      return;
+    }
     analyseFile(fileContent.text);
   };
 
   const analyseFile = useCallback(
     async (text: string): Promise<TextAnalysisResult | null> => {
+      console.log("analysing file");
       setIsAnalysing(true);
       let res: TextAnalysisResult | null = null;
 
@@ -123,13 +129,28 @@ export function FileAnalysisProvider({
     // avoid for empty file
     if (!file) {
       resetState();
+      return;
     }
     // Read file text and handle error
     readFileText();
   }, [file]);
 
   useEffect(() => {
+    console.log("FILE CONTENT:", fileContent);
+  }, [fileContent]);
+
+  useEffect(() => {
     setIsBusy(isAnalysing || isPlotting || isUploading || isReadingFile);
+    console.log(
+      "isAnalysing:",
+      isAnalysing,
+      "\nisPlotting:",
+      isPlotting,
+      "\nisReadingFile:",
+      isReadingFile,
+      "\nisUploading:",
+      isUploading
+    );
   }, [isAnalysing, isPlotting, isUploading, isReadingFile]);
 
   return (
@@ -139,7 +160,7 @@ export function FileAnalysisProvider({
         isAnalysing,
         isUploading,
         isPlotting,
-        isReading: isReadingFile,
+        isReadingFile,
         file,
         setFile,
         supportedFileTypes,
@@ -191,7 +212,7 @@ export type AnalysisContextType = {
   isAnalysing: boolean;
   isPlotting: boolean;
   isUploading: boolean;
-  isReading: boolean;
+  isReadingFile: boolean;
   fileContent: fileContentType | null;
   supportedFileTypes: typeof supportedFileTypes;
   analysisResult: TextAnalysisResult | null;
