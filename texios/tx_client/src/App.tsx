@@ -11,66 +11,11 @@ import {
 } from "./components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FileSelect } from "./components/FileSelect";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  ResponsiveContainer,
-  Tooltip,
-  Label,
-} from "recharts";
-import { analyse } from "./pkg/text_analyser";
+import { WordFrequencyPlot } from "./components/WordFrequencyPlot";
 
 function App() {
-  const [analysisResult, setAnalysisResult] = useState<TextAnalysisRes | null>(
-    null
-  );
-  const [wordFrequencies, setWordFrequencies] =
-    useState<WordFreqPlotDataType | null>(null);
-  const [plotLimit, _] = useState<number>(7);
-  const [isAnalysing, setIsAnalysing] = useState<boolean>(false);
-  const [isPlotting] = useState<boolean>(false);
-  // text analyser
-  const textAnalyse = useCallback(
-    async (text: string): Promise<TextAnalysisRes> => {
-      setIsAnalysing(true);
-      const result = analyse(text) as WasmResultValue;
-      //console.log("wasm analysis result", result);
-      const wFreqs: WordFreqArray = Array.from(
-        result.get("word_freqs") ?? new Map()
-      ).sort((a, b) => b[1] - a[1]);
-      const wPos = (result.get("word_pos") ?? new Map()) as WordPosMap;
-      const stats = (result.get("stats") ?? new Map()) as StatsMap;
-      setTimeout(() => {
-        setIsAnalysing(false);
-      }, 3000);
-      return {
-        word_pos: wPos,
-        word_freqs: wFreqs,
-        stats,
-      };
-    },
-    []
-  );
-  const [file, setFile] = useState<File | null>(null);
-
-  useEffect(() => {
-    if (!file || !analysisResult) return;
-    let arr: WordFreqPlotDataType = analysisResult.word_freqs
-      .slice(0, plotLimit)
-      .map(([word, f]) => {
-        return { word, f };
-      });
-    setWordFrequencies(arr);
-  }, [analysisResult, file]);
-
-  useEffect(() => {
-    console.log("word frequencies:", wordFrequencies);
-  }, [wordFrequencies, isAnalysing, isPlotting]);
-
   return (
     <div className="m-auto flex h-screen flex-col items-center justify-center p-3">
       <Card className="min-h-3/4 w-full md:w-2/3 lg:w-1/2 shadow-none gap-2 overflow-y-auto">
@@ -90,9 +35,7 @@ function App() {
         </CardContent>
         {/* Uploaded Content */}
         <CardFooter className="flex flex-col gap-1 mt-5">
-          {file && wordFrequencies && (
-            <WordFrequencyPlot data={wordFrequencies} />
-          )}
+          <WordFrequencyPlot chartType="bar" />
         </CardFooter>
       </Card>
     </div>
@@ -182,50 +125,16 @@ export function UploadingState() {
   );
 }
 
-function WordFrequencyPlot({ data }: { data: WordFreqPlotDataType }) {
-  return (
-    <div className="w-full min-h-[300px] border-1 border-neutral-200 p-5 bg-gray-100 rounded-xl overflow-auto">
-      <ResponsiveContainer className="p-4">
-        <BarChart data={data} margin={{ bottom: 18 }} className="p-2">
-          <XAxis
-            dataKey={"word"}
-            label={{ value: "Words", position: "insideBottom", offset: -18 }}
-            className="text-sm"
-          />
-          <YAxis className="text-sm">
-            <Label
-              value="Count"
-              angle={-90}
-              offset={10}
-              position="insideLeft"
-              style={{ textAnchor: "middle", fill: "#777" }}
-            />
-          </YAxis>
-          <Tooltip />
-          <Bar dataKey={"f"} fill="#0f52ba" />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
-  );
-}
-
 export type TextAnalysisRes = {
   word_pos: WordPosMap;
   word_freqs: WordFreqArray;
   stats: StatsMap;
 };
 
-type WasmResultKey = "word_pos" | "stats" | "word_freqs";
 type WasmStatsKey = "word_count" | "char_count";
-type WordFreqMap = Map<string, number>;
+
 type WordFreqArray = [string, number][];
 type StatsMap = Map<WasmStatsKey, number>;
 type WordPosMap = Map<string, Array<number>>;
-type WasmResultValue = Map<WasmResultKey, WordFreqMap | StatsMap | WordPosMap>;
-
-type WordFreqPlotDataType = {
-  word: string;
-  f: number;
-}[];
 
 export default App;

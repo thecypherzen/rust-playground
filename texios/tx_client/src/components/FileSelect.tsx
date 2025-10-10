@@ -5,30 +5,15 @@ import { Spinner } from "./ui/spinner";
 import { UseFileAnalysis } from "@/hooks/UseFileAnalysis";
 
 export function FileSelect() {
-  const {
-    file,
-    setFile,
-    fileContent,
-    analyseFile,
-    isAnalysing,
-    isPlotting,
-    isReadingFile,
-  } = UseFileAnalysis();
+  const { file, setFile, fileContent, analyseFile, isAnalysing, isPlotting } =
+    UseFileAnalysis();
   const inputRef = useRef<HTMLInputElement>(null);
   const fileTypes = ".txt,.md,.json,.csv,.js,.py,.ts,.sql";
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   useEffect(() => {
     setIsProcessing(isAnalysing || isPlotting);
-    console.log("isReading File", isReadingFile);
-  }, [
-    file,
-    isAnalysing,
-    isPlotting,
-    isReadingFile,
-    fileContent,
-    fileContent?.size,
-  ]);
+  }, [file, isAnalysing, isPlotting, fileContent]);
 
   return (
     <div className="flex flex-col gap-3 justify-center items-center border-1 border-dashed border-neutral-400 rounded-lg p-6 flex-grow flex-3/4">

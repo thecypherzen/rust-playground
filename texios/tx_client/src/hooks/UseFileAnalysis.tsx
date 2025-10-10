@@ -31,7 +31,7 @@ export function FileAnalysisProvider({
   const [file, setFile] = useState<FileType>(null);
   const [isAnalysing, setIsAnalysing] = useState<boolean>(false);
   const [isPlotting, setIsPlotting] = useState<boolean>(false);
-  const [isUploading, _] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isReadingFile, setIsReadingFile] = useState<boolean>(false);
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const [fileContent, setFileContent] = useState<fileContentType | null>(null);
@@ -84,9 +84,7 @@ export function FileAnalysisProvider({
   }, [file]);
 
   const handleFileAnalysis = () => {
-    console.log("file analysis called");
     if (!fileContent || justAnalysedRef.current == fileContent.text) {
-      console.error(!!!file ? "no file" : "file already analysed");
       return;
     }
     analyseFile(fileContent.text);
@@ -94,7 +92,6 @@ export function FileAnalysisProvider({
 
   const analyseFile = useCallback(
     async (text: string): Promise<TextAnalysisResult | null> => {
-      console.log("analysing file");
       setIsAnalysing(true);
       let res: TextAnalysisResult | null = null;
 
@@ -137,22 +134,10 @@ export function FileAnalysisProvider({
     readFileText();
   }, [file]);
 
-  useEffect(() => {
-    console.log("FILE CONTENT:", fileContent);
-  }, [fileContent]);
+  useEffect(() => {}, [fileContent]);
 
   useEffect(() => {
     setIsBusy(isAnalysing || isPlotting || isUploading || isReadingFile);
-    console.log(
-      "isAnalysing:",
-      isAnalysing,
-      "\nisPlotting:",
-      isPlotting,
-      "\nisReadingFile:",
-      isReadingFile,
-      "\nisUploading:",
-      isUploading
-    );
   }, [isAnalysing, isPlotting, isUploading, isReadingFile]);
 
   return (
@@ -161,7 +146,9 @@ export function FileAnalysisProvider({
         isBusy,
         isAnalysing,
         isUploading,
+        setIsUploading,
         isPlotting,
+        setIsPlotting,
         isReadingFile,
         file,
         setFile,
@@ -213,7 +200,9 @@ export type AnalysisContextType = {
   isBusy: boolean;
   isAnalysing: boolean;
   isPlotting: boolean;
+  setIsPlotting: React.Dispatch<React.SetStateAction<boolean>>;
   isUploading: boolean;
+  setIsUploading: React.Dispatch<React.SetStateAction<boolean>>;
   isReadingFile: boolean;
   fileContent: fileContentType | null;
   supportedFileTypes: typeof supportedFileTypes;
