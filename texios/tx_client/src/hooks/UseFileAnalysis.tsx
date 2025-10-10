@@ -4,6 +4,7 @@ import {
   useState,
   useEffect,
   useCallback,
+  useRef,
 } from "react";
 import { analyse } from "@/pkg/text_analyser";
 // default values
@@ -37,6 +38,7 @@ export function FileAnalysisProvider({
   const [error, setError] = useState<ErrorType>(null);
   const [analysisResult, setAnalysisResult] =
     useState<TextAnalysisResult | null>(null);
+  const justAnalysedRef = useRef<string | null>(null);
 
   /**
    * State reset function
@@ -58,7 +60,6 @@ export function FileAnalysisProvider({
    */
   const readFileText = useCallback(async () => {
     if (!file) return;
-    console.log("reading file");
     setIsReadingFile(true);
     const timeout = setTimeout(() => {
       const fileReader = new FileReader();
@@ -84,8 +85,8 @@ export function FileAnalysisProvider({
 
   const handleFileAnalysis = () => {
     console.log("file analysis called");
-    if (!fileContent?.text) {
-      console.error("no file? ", !!file, "\n\tno file content");
+    if (!fileContent || justAnalysedRef.current == fileContent.text) {
+      console.error(!!!file ? "no file" : "file already analysed");
       return;
     }
     analyseFile(fileContent.text);
@@ -110,6 +111,7 @@ export function FileAnalysisProvider({
             frequencies: wFreqs,
             stats,
           };
+          justAnalysedRef.current = text;
         } catch (e: any) {
           setError({ message: "Analysing file failed" });
           console.error(e);
