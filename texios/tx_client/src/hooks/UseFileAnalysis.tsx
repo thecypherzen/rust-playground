@@ -34,7 +34,7 @@ export function FileAnalysisProvider({
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isReadingFile, setIsReadingFile] = useState<boolean>(false);
   const [isBusy, setIsBusy] = useState<boolean>(false);
-  const [fileContent, setFileContent] = useState<fileContentType | null>(null);
+  const [fileContent, setFileContent] = useState<string | null>(null);
   const [error, setError] = useState<ErrorType>(null);
   const [analysisResult, setAnalysisResult] =
     useState<TextAnalysisResult | null>(null);
@@ -67,11 +67,7 @@ export function FileAnalysisProvider({
         file.type.startsWith("text") ||
         (!file.type && supportedFileTypes.some((v) => file.name.endsWith(v)))
       ) {
-        fileReader.onload = (e) =>
-          setFileContent({
-            text: e.target?.result as string,
-            size: getFileSize(file.size),
-          });
+        fileReader.onload = (e) => setFileContent(e.target?.result as string);
         fileReader.readAsText(file);
       } else {
         setFileContent(null);
@@ -84,10 +80,10 @@ export function FileAnalysisProvider({
   }, [file]);
 
   const handleFileAnalysis = () => {
-    if (!fileContent || justAnalysedRef.current == fileContent.text) {
+    if (!fileContent || justAnalysedRef.current == fileContent) {
       return;
     }
-    analyseFile(fileContent.text);
+    analyseFile(fileContent);
   };
 
   const analyseFile = useCallback(
@@ -173,24 +169,6 @@ export function UseFileAnalysis() {
   return context;
 }
 
-/**
- * Utility funcs
- */
-function getFileSize(bytes: number) {
-  const units: Record<number, "KB" | "MB" | "GB"> = {
-    1000: "KB",
-    1000000: "MB",
-    1000000000: "GB",
-  };
-
-  let div = 1000;
-  while (bytes / div > 1000) {
-    div *= 1000;
-  }
-
-  const value = Math.round((bytes / div) * 100) / 100;
-  return `${value} ${units[div]}`;
-}
 /*
  *  Types
  */
@@ -204,7 +182,7 @@ export type AnalysisContextType = {
   isUploading: boolean;
   setIsUploading: React.Dispatch<React.SetStateAction<boolean>>;
   isReadingFile: boolean;
-  fileContent: fileContentType | null;
+  fileContent: string | null;
   supportedFileTypes: typeof supportedFileTypes;
   analysisResult: TextAnalysisResult | null;
   analyseFile: () => void;
@@ -226,10 +204,6 @@ export type WordFreqPlotDataType = {
   word: string;
   f: number;
 }[];
-export type fileContentType = {
-  text: string;
-  size: string;
-};
 export type TextAnalysisResult = {
   positions: WordPosMap;
   frequencies: WordFreqArray;

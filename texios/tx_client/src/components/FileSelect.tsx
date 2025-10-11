@@ -5,7 +5,7 @@ import { Spinner } from "./ui/spinner";
 import { UseFileAnalysis } from "@/hooks/UseFileAnalysis";
 
 export function FileSelect() {
-  const { file, setFile, fileContent, analyseFile, isAnalysing, isPlotting } =
+  const { file, setFile, analyseFile, isAnalysing, isPlotting } =
     UseFileAnalysis();
   const inputRef = useRef<HTMLInputElement>(null);
   const fileTypes = ".txt,.md,.json,.csv,.js,.py,.ts,.sql";
@@ -13,7 +13,7 @@ export function FileSelect() {
 
   useEffect(() => {
     setIsProcessing(isAnalysing || isPlotting);
-  }, [file, isAnalysing, isPlotting, fileContent]);
+  }, [file, isAnalysing, isPlotting]);
 
   return (
     <div className="flex flex-col gap-3 justify-center items-center border-1 border-dashed border-neutral-400 rounded-lg p-6 flex-grow flex-3/4">
@@ -24,8 +24,10 @@ export function FileSelect() {
           <div className="size-10 rounded-md bg-white shadow-md shadow-gray-200 flex flex-col items-center justify-center p-2">
             <File />
           </div>
-          <h4>{file.name}</h4>
-          {fileContent && <p>{fileContent.size}</p>}
+          <div className="flex items-center gap-1">
+            <h4>{file.name}</h4>
+            <span className="text-sm">{`(${getFileSize(file.size)})`}</span>
+          </div>
         </div>
       )}
       <input
@@ -83,4 +85,20 @@ function Empty() {
       </div>
     </div>
   );
+}
+
+function getFileSize(bytes: number) {
+  const units: Record<number, "KB" | "MB" | "GB"> = {
+    1000: "KB",
+    1000000: "MB",
+    1000000000: "GB",
+  };
+
+  let div = 1000;
+  while (bytes / div > 1000) {
+    div *= 1000;
+  }
+
+  const value = Math.round((bytes / div) * 100) / 100;
+  return `${value} ${units[div]}`;
 }
