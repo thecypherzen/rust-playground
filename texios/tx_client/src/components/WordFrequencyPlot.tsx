@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { Spinner } from "./ui/spinner";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { cn } from "@/lib/utils";
 
 export function WordFrequencyPlot({
   chartType = "bar",
@@ -54,17 +55,23 @@ export function WordFrequencyPlot({
 
   useEffect(() => {}, [isPlotting, isAnalysing, file]);
 
-  if (!plotData) {
-    return <></>;
-  }
   return (
-    <Card className="w-full rounded-xl pt-0">
+    <Card
+      className={cn(
+        "w-full rounded-xl pt-0",
+        (!plotData || isPlotting || isAnalysing) &&
+          "bg-transparent shadow-none border-none"
+      )}
+    >
       <CardHeader>
         <CardTitle className="sr-only">{`Word frequency ${chartType} chart for ${file?.name}`}</CardTitle>
       </CardHeader>
       <CardContent className="w-full flex flex-col items-center justify-center">
-        {isPlotting || isAnalysing ? (
-          <Spinner />
+        {!plotData || isPlotting || isAnalysing ? (
+          <div className="flex gap-2 items-center">
+            <Spinner />
+            <p>Hold on a sec</p>
+          </div>
         ) : (
           <div className="w-full flex flex-col items-center justify-center">
             <h5 className="text-gray-400 font-semibold text-lg capitalize">
@@ -95,7 +102,7 @@ export function WordFrequencyPlot({
                       style={{ textAnchor: "middle", fill: "#777" }}
                     />
                   </YAxis>
-                  <Tooltip />
+                  <Tooltip cursor={{ fill: "rgba(0,0,0,0.05)" }} />
                   <Bar dataKey={"f"} fill="#0f52ba" />
                 </BarChart>
               ) : (

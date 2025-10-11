@@ -18,6 +18,7 @@ import { cn } from "./lib/utils";
 function App() {
   const { analysisResult } = UseFileAnalysis();
   useEffect(() => {}, [analysisResult]);
+
   return (
     <div
       className={cn(

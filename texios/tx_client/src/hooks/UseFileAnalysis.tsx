@@ -45,12 +45,13 @@ export function FileAnalysisProvider({
    */
   const resetState = useCallback((delay: number = 0) => {
     const timeout = setTimeout(() => {
-      if (isAnalysing) setIsAnalysing(false);
-      if (isPlotting) setIsPlotting(false);
-      if (isReadingFile) setIsReadingFile(false);
-      if (fileContent) setFileContent(null);
-      if (error) setError(null);
-      if (analysisResult) setAnalysisResult(null);
+      setIsAnalysing(false);
+      setIsPlotting(false);
+      setIsReadingFile(false);
+      setFileContent(null);
+      setError(null);
+      setAnalysisResult(null);
+      justAnalysedRef.current = null;
     }, delay);
     return () => clearTimeout(timeout);
   }, []);
@@ -130,7 +131,7 @@ export function FileAnalysisProvider({
     readFileText();
   }, [file]);
 
-  useEffect(() => {}, [fileContent]);
+  useEffect(() => {}, [fileContent, analysisResult]);
 
   useEffect(() => {
     setIsBusy(isAnalysing || isPlotting || isUploading || isReadingFile);
@@ -152,6 +153,7 @@ export function FileAnalysisProvider({
         fileContent,
         analysisResult,
         analyseFile: handleFileAnalysis,
+        error,
       }}
     >
       {children}
@@ -185,6 +187,7 @@ export type AnalysisContextType = {
   fileContent: string | null;
   supportedFileTypes: typeof supportedFileTypes;
   analysisResult: TextAnalysisResult | null;
+  error: ErrorType | null;
   analyseFile: () => void;
 };
 type ErrorType = { message: string } | null;
