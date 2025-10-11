@@ -4,125 +4,53 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
-  //CardFooter,
   CardHeader,
   CardTitle,
 } from "./components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FileSelect } from "./components/FileSelect";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  ResponsiveContainer,
-  Tooltip,
-  Label,
-} from "recharts";
-//import { analyse } from "./pkg/text_analyser";
+import { WordFrequencyPlot } from "./components/WordFrequencyPlot";
+import { UseFileAnalysis } from "./hooks/UseFileAnalysis";
+import { cn } from "./lib/utils";
 
 function App() {
-  const [analysisResult, setAnalysisResult] = useState<TextAnalysisRes | null>(
-    null
-  );
-  const [wordFrequencies, setWordFrequencies] =
-    useState<WordFreqPlotDataType | null>(null);
-  const [plotLimit, _] = useState<number>(7);
-  const [isAnalysing, setIsAnalysing] = useState<boolean>(false);
-  const [isPlotting] = useState<boolean>(false);
-  // text analyser
-  const textAnalyse = useCallback(
-    async (text: string): Promise<TextAnalysisRes> => {
-      setIsAnalysing(true);
-      //const result = analyse(text);
-      //console.log("analysis result", result);
-      const frequencies: Record<string, number> = {};
-      const positions: Record<string, number[]> = {};
-      const stats = {} as {
-        word_count: number;
-        char_count: number;
-      };
-
-      const re = /[a-zA-Z]+\b/g;
-      let res = text.match(re);
-
-      res?.map((w, index) => {
-        const word = w.toLowerCase();
-        const v = positions[word] ?? [];
-        v.push(index);
-        positions[word] = v;
-        frequencies[word] = (frequencies[word] ?? 0) + 1;
-      });
-      stats.word_count = res!.length;
-      stats.char_count = text.length;
-      setTimeout(() => {
-        setIsAnalysing(false);
-      }, 3000);
-      return {
-        word_pos: positions,
-        word_freqs: frequencies,
-        stats,
-      };
-    },
-    []
-  );
-  const [file, setFile] = useState<File | null>(null);
-
-  useEffect(() => {
-    if (!analysisResult) return;
-    let arr: WordFreqPlotDataType = Object.entries(analysisResult.word_freqs)
-      .sort((a, b) => b[1] - a[1])
-      .map(([word, f]) => {
-        return { word, f };
-      })
-      .slice(0, plotLimit);
-    setWordFrequencies(arr);
-  }, [analysisResult]);
-
-  useEffect(() => {}, [wordFrequencies, isAnalysing, isPlotting]);
+  const { analysisResult } = UseFileAnalysis();
+  useEffect(() => {}, [analysisResult]);
 
   return (
-    <div className="w-full min-h-screen bg-gray-950"></div>
-    //<div className="m-auto flex h-screen flex-col items-center justify-center p-3">
-    //  <Card className="min-h-3/4 w-full md:w-2/3 lg:w-1/2 shadow-none gap-2 overflow-y-auto">
-    //    <CardHeader className="border-b-1 border-gray-200 flex gap-3 items-center pt-2 pb-3">
-    //      <div className="rounded-full h-full w-auto aspect-square p-2 flex flex-col items-center justify-center border-1 border-neutral-200">
-    //        <CloudUpload />
-    //      </div>
-    //      <div>
-    //        <CardTitle className="text-xl font-medium">Texios</CardTitle>
-    //        <CardDescription className="text-gray-400 text-md font-light">
-    //          Select or upload file to analyse
-    //        </CardDescription>
-    //      </div>
-    //    </CardHeader>
-    //    <CardContent className="flex flex-col gap-4 border-0 border-neutral-300 flex-1 pt-5">
-    //      <FileSelect
-    //        analyseText={(t: string) => {
-    //          textAnalyse(t)
-    //            .then((res) => {
-    //              setAnalysisResult(res);
-    //            })
-    //            .catch((err: any) => {
-    //              console.error(err);
-    //            });
-    //        }}
-    //        file={file}
-    //        setFile={setFile}
-    //        isProcessing={isAnalysing || isPlotting}
-    //      />
-    //    </CardContent>
-    //    {/* Uploaded Content */}
-    //    <CardFooter className="flex flex-col gap-1 mt-5">
-    //      {file && wordFrequencies && (
-    //        <WordFrequencyPlot data={wordFrequencies} />
-    //      )}
-    //    </CardFooter>
-    //  </Card>
-    //</div>
+    <div
+      className={cn(
+        "m-auto flex min-h-screen lg:h-screen flex-col lg:flex-row items-center justify-center lg:items-start p-3 w-full md:max-w-4/5  gap-6 lg:max-w-[1400px]"
+      )}
+    >
+      <Card className="w-full lg:flex-2/5 2xl:flex-1/2 shadow-none gap-2 flex-grow lg:max-w-[600px]">
+        <CardHeader className="border-b-1 border-gray-200 flex gap-3 items-center pt-2 pb-3">
+          <div className="rounded-full h-full w-auto aspect-square p-2 flex flex-col items-center justify-center border-1 border-neutral-200">
+            <CloudUpload />
+          </div>
+          <div>
+            <CardTitle className="text-xl font-medium">Texios</CardTitle>
+            <CardDescription className="text-gray-400 text-md font-light">
+              Select or upload file to analyse
+            </CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4 border-0 border-neutral-300 flex-1 pt-5">
+          <FileSelect />
+        </CardContent>
+      </Card>
+      {/* Graphs */}
+      {analysisResult && (
+        <div className="w-full lg:flex-3/5 2xl:flex-1/2 flex flex-col max-h-full items-center lg:items-end flex-grow p-2 md:p-5 bg-gray-100 rounded-2xl">
+          <h3 className="font-semibold text-2xl self-center p-3">Your Plots</h3>
+          <div className="w-full overflow-y-scroll flex flex-col items-center lg:items-end flex-grow gap-5 p-2 md:p-5">
+            <WordFrequencyPlot chartType="bar" />
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -209,45 +137,16 @@ export function UploadingState() {
   );
 }
 
-function WordFrequencyPlot({ data }: { data: WordFreqPlotDataType }) {
-  return (
-    <div className="w-full min-h-[300px] border-1 border-neutral-200 p-5 bg-gray-100 rounded-xl overflow-auto">
-      <ResponsiveContainer className="p-4">
-        <BarChart data={data} margin={{ bottom: 18 }} className="p-2">
-          <XAxis
-            dataKey={"word"}
-            label={{ value: "Words", position: "insideBottom", offset: -18 }}
-            className="text-sm"
-          />
-          <YAxis className="text-sm">
-            <Label
-              value="Count"
-              angle={-90}
-              offset={10}
-              position="insideLeft"
-              style={{ textAnchor: "middle", fill: "#777" }}
-            />
-          </YAxis>
-          <Tooltip />
-          <Bar dataKey={"f"} fill="#0f52ba" />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
-  );
-}
-
 export type TextAnalysisRes = {
-  word_pos: Record<string, number[]>;
-  word_freqs: Record<string, number>;
-  stats: {
-    word_count: number;
-    char_count: number;
-  };
+  word_pos: WordPosMap;
+  word_freqs: WordFreqArray;
+  stats: StatsMap;
 };
 
-type WordFreqPlotDataType = {
-  word: string;
-  f: number;
-}[];
+type WasmStatsKey = "word_count" | "char_count";
+
+type WordFreqArray = [string, number][];
+type StatsMap = Map<WasmStatsKey, number>;
+type WordPosMap = Map<string, Array<number>>;
 
 export default App;

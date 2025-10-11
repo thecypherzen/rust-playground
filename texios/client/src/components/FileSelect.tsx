@@ -2,69 +2,21 @@ import { CloudUpload, File } from "lucide-react";
 import { Button } from "./ui/button";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./ui/spinner";
+import { UseFileAnalysis } from "@/hooks/UseFileAnalysis";
 
-const sizes: Record<string, SizeUnit> = {
-  1000: "KB",
-  1000000: "MB",
-  1000000000: "GB",
-};
-type SizeUnit = "GB" | "KB" | "MB";
-
-export function FileSelect({
-  analyseText,
-  isProcessing,
-  file,
-  setFile,
-}: {
-  analyseText: (t: string) => void;
-  isProcessing: boolean;
-  file: File | null;
-  setFile: React.Dispatch<React.SetStateAction<File | null>>;
-}) {
-  console.log("isprocessing:", isProcessing);
-  const [fileText, setFileText] = useState<string | null>(null);
-  const [error, setError] = useState<{ type: string; message: string } | null>(
-    null
-  );
-  const [fileSize, setFileSize] = useState<{
-    value: number;
-    unit: SizeUnit;
-  } | null>(null);
+export function FileSelect() {
+  const { file, setFile, analyseFile, isAnalysing, isPlotting } =
+    UseFileAnalysis();
   const inputRef = useRef<HTMLInputElement>(null);
   const fileTypes = ".txt,.md,.json,.csv,.js,.py,.ts,.sql";
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   useEffect(() => {
-    if (file) {
-      let div = 1000;
-      while (file.size / div > 1000) {
-        div *= 1000;
-      }
-      let size = Math.round((file.size / div) * 100) / 100;
-      setFileSize({ value: size, unit: sizes[div] });
-
-      const fileReader = new FileReader();
-      console.log("file", file);
-      // get text content
-      const supportedTypes = fileTypes.split(",");
-      if (
-        file.type.startsWith("text") ||
-        (!file.type && supportedTypes.some((v) => file.name.endsWith(v)))
-      ) {
-        fileReader.onloadend = (e) => setFileText(e.target?.result as string);
-        fileReader.readAsText(file);
-      } else {
-        setFileText(null);
-        setError({ type: "unsupported", message: "File Not Supported" });
-      }
-    }
-  }, [file]);
-
-  useEffect(() => {
-    console.log("error:", error);
-  }, [error?.type, error?.message]);
+    setIsProcessing(isAnalysing || isPlotting);
+  }, [file, isAnalysing, isPlotting]);
 
   return (
-    <div className="flex flex-col gap-3 justify-center items-center border-3 border-dashed border-blue-500 rounded-lg p-6 flex-grow flex-3/4">
+    <div className="flex flex-col gap-3 justify-center items-center border-1 border-dashed border-neutral-400 rounded-lg p-6 flex-grow flex-3/4">
       {!file && <Empty />}
       {/* File Preview */}
       {file && (
@@ -72,12 +24,10 @@ export function FileSelect({
           <div className="size-10 rounded-md bg-white shadow-md shadow-gray-200 flex flex-col items-center justify-center p-2">
             <File />
           </div>
-          <h4>{file.name}</h4>
-          {fileSize && (
-            <p>
-              {fileSize.value} {fileSize.unit}
-            </p>
-          )}
+          <div className="flex items-center gap-1">
+            <h4>{file.name}</h4>
+            <span className="text-sm">{`(${getFileSize(file.size)})`}</span>
+          </div>
         </div>
       )}
       <input
@@ -111,15 +61,11 @@ export function FileSelect({
           <Button
             size="sm"
             className="mt-3 cursor-pointer flex items-center gap-1"
-            onClick={() => {
-              if (fileText) {
-                analyseText(fileText);
-              }
-            }}
+            onClick={analyseFile}
             disabled={isProcessing}
           >
             {isProcessing && <Spinner className="size-4" />}
-            Analyse
+            {isProcessing ? "Analysing" : "Analyse"}
           </Button>
         )}
       </div>
@@ -139,4 +85,20 @@ function Empty() {
       </div>
     </div>
   );
+}
+
+function getFileSize(bytes: number) {
+  const units: Record<number, "KB" | "MB" | "GB"> = {
+    1000: "KB",
+    1000000: "MB",
+    1000000000: "GB",
+  };
+
+  let div = 1000;
+  while (bytes / div > 1000) {
+    div *= 1000;
+  }
+
+  const value = Math.round((bytes / div) * 100) / 100;
+  return `${value} ${units[div]}`;
 }
