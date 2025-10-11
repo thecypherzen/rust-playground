@@ -4,8 +4,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
-  //CardFooter,
   CardHeader,
   CardTitle,
 } from "./components/ui/card";
@@ -14,11 +12,19 @@ import { Progress } from "@/components/ui/progress";
 import { useEffect, useState } from "react";
 import { FileSelect } from "./components/FileSelect";
 import { WordFrequencyPlot } from "./components/WordFrequencyPlot";
+import { UseFileAnalysis } from "./hooks/UseFileAnalysis";
+import { cn } from "./lib/utils";
 
 function App() {
+  const { analysisResult } = UseFileAnalysis();
+  useEffect(() => {}, [analysisResult]);
   return (
-    <div className="m-auto flex h-screen flex-col items-center justify-center p-3">
-      <Card className="min-h-3/4 w-full md:w-2/3 lg:w-1/2 shadow-none gap-2 overflow-y-auto">
+    <div
+      className={cn(
+        "m-auto flex min-h-screen lg:h-screen flex-col lg:flex-row items-center justify-center lg:items-start p-3 w-full md:max-w-4/5  gap-6 lg:max-w-[1400px]"
+      )}
+    >
+      <Card className="w-full lg:flex-2/5 2xl:flex-1/2 shadow-none gap-2 flex-grow lg:max-w-[600px]">
         <CardHeader className="border-b-1 border-gray-200 flex gap-3 items-center pt-2 pb-3">
           <div className="rounded-full h-full w-auto aspect-square p-2 flex flex-col items-center justify-center border-1 border-neutral-200">
             <CloudUpload />
@@ -33,11 +39,16 @@ function App() {
         <CardContent className="flex flex-col gap-4 border-0 border-neutral-300 flex-1 pt-5">
           <FileSelect />
         </CardContent>
-        {/* Uploaded Content */}
-        <CardFooter className="flex flex-col gap-1 mt-5">
-          <WordFrequencyPlot chartType="bar" />
-        </CardFooter>
       </Card>
+      {/* Graphs */}
+      {analysisResult && (
+        <div className="w-full lg:flex-3/5 2xl:flex-1/2 flex flex-col max-h-full items-center lg:items-end flex-grow p-2 md:p-5 bg-gray-100 rounded-2xl">
+          <h3 className="font-semibold text-2xl self-center p-3">Your Plots</h3>
+          <div className="w-full overflow-y-scroll flex flex-col items-center lg:items-end flex-grow gap-5 p-2 md:p-5">
+            <WordFrequencyPlot chartType="bar" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -10,12 +10,13 @@ import {
   YAxis,
 } from "recharts";
 import { Spinner } from "./ui/spinner";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export function WordFrequencyPlot({
   chartType = "bar",
   plotLimit = 7,
 }: WordFPlotPropsType) {
-  const { analysisResult, isPlotting, setIsPlotting, isAnalysing } =
+  const { analysisResult, isPlotting, setIsPlotting, isAnalysing, file } =
     UseFileAnalysis();
   const [plotData, setPlotData] = useState<WordFPlotDataType | null>(null);
   const plottedDataRef = useRef<WordFPlotDataType | null>(null);
@@ -51,46 +52,60 @@ export function WordFrequencyPlot({
     }
   }, [analysisResult, plotData]);
 
-  useEffect(() => {}, [isPlotting, isAnalysing]);
+  useEffect(() => {}, [isPlotting, isAnalysing, file]);
 
   if (!plotData) {
     return <></>;
   }
   return (
-    <div className="w-full min-h-[300px] border-1 border-neutral-200 p-5 bg-gray-100 rounded-xl overflow-auto flex flex-col items-center justify-center">
-      {isPlotting || isAnalysing ? (
-        <Spinner />
-      ) : (
-        <ResponsiveContainer className="p-4">
-          {chartType === "bar" ? (
-            <BarChart data={plotData} margin={{ bottom: 18 }} className="p-2">
-              <XAxis
-                dataKey={"word"}
-                label={{
-                  value: "Words",
-                  position: "insideBottom",
-                  offset: -18,
-                }}
-                className="text-sm"
-              />
-              <YAxis className="text-sm">
-                <Label
-                  value="Count"
-                  angle={-90}
-                  offset={10}
-                  position="insideLeft"
-                  style={{ textAnchor: "middle", fill: "#777" }}
-                />
-              </YAxis>
-              <Tooltip />
-              <Bar dataKey={"f"} fill="#0f52ba" />
-            </BarChart>
-          ) : (
-            <></>
-          )}
-        </ResponsiveContainer>
-      )}
-    </div>
+    <Card className="w-full rounded-xl pt-0">
+      <CardHeader>
+        <CardTitle className="sr-only">{`Word frequency ${chartType} chart for ${file?.name}`}</CardTitle>
+      </CardHeader>
+      <CardContent className="w-full flex flex-col items-center justify-center">
+        {isPlotting || isAnalysing ? (
+          <Spinner />
+        ) : (
+          <div className="w-full flex flex-col items-center justify-center">
+            <h5 className="text-gray-400 font-semibold text-lg capitalize">
+              {`word frequency ${chartType} chart`}
+            </h5>
+            <ResponsiveContainer className="p-4" height={310}>
+              {chartType === "bar" ? (
+                <BarChart
+                  data={plotData}
+                  margin={{ bottom: 18 }}
+                  className="p-2"
+                >
+                  <XAxis
+                    dataKey={"word"}
+                    label={{
+                      value: "Words",
+                      position: "insideBottom",
+                      offset: -18,
+                    }}
+                    className="text-sm"
+                  />
+                  <YAxis className="text-sm">
+                    <Label
+                      value="Count"
+                      angle={-90}
+                      offset={10}
+                      position="insideLeft"
+                      style={{ textAnchor: "middle", fill: "#777" }}
+                    />
+                  </YAxis>
+                  <Tooltip />
+                  <Bar dataKey={"f"} fill="#0f52ba" />
+                </BarChart>
+              ) : (
+                <></>
+              )}
+            </ResponsiveContainer>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
