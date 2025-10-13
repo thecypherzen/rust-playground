@@ -8,7 +8,7 @@ import {
 } from "react";
 import { analyse } from "@/pkg/text_analyser";
 // default values
-const supportedFileTypes = [
+export const supportedFileTypes = [
   ".txt",
   ".md",
   ".json",
@@ -66,6 +66,7 @@ export function FileAnalysisProvider({
       const fileReader = new FileReader();
       if (
         file.type.startsWith("text") ||
+        file.type === "application/json" ||
         (!file.type && supportedFileTypes.some((v) => file.name.endsWith(v)))
       ) {
         fileReader.onload = (e) => setFileContent(e.target?.result as string);

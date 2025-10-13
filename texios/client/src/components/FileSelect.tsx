@@ -2,13 +2,14 @@ import { CloudUpload, File } from "lucide-react";
 import { Button } from "./ui/button";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./ui/spinner";
-import { UseFileAnalysis } from "@/hooks/UseFileAnalysis";
+import { supportedFileTypes, UseFileAnalysis } from "@/hooks/UseFileAnalysis";
+
+const fileTypes = supportedFileTypes.join(",");
 
 export function FileSelect() {
   const { file, setFile, analyseFile, isAnalysing, isPlotting } =
     UseFileAnalysis();
   const inputRef = useRef<HTMLInputElement>(null);
-  const fileTypes = ".txt,.md,.json,.csv,.js,.py,.ts,.sql";
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   useEffect(() => {
@@ -80,7 +81,8 @@ function Empty() {
       <div className="flex flex-col gap-1 justify-center items-center">
         <p>Choose file or drag and drop it here</p>
         <p className="text-gray-400 text-xs">
-          TXT, PDF, MD, DOC DOCX up to&nbsp;<span>50mb</span>
+          <span className="uppercase">{`${fileTypes}`}</span>&nbsp;up to&nbsp;
+          <span>20mb</span>
         </p>
       </div>
     </div>

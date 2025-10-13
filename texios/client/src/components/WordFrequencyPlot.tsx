@@ -1,4 +1,7 @@
-import { UseFileAnalysis } from "@/hooks/UseFileAnalysis";
+import {
+  UseFileAnalysis,
+  type TextAnalysisResult,
+} from "@/hooks/UseFileAnalysis";
 import { useEffect, useRef, useState } from "react";
 import {
   Bar,
@@ -20,7 +23,7 @@ export default function WordFrequencyPlot({
   const { analysisResult, isPlotting, setIsPlotting, isAnalysing, file } =
     UseFileAnalysis();
   const [plotData, setPlotData] = useState<WordFPlotDataType | null>(null);
-  const plottedDataRef = useRef<WordFPlotDataType | null>(null);
+  const analysisResRef = useRef<TextAnalysisResult | null>(null);
 
   useEffect(() => {
     if (!analysisResult) {
@@ -31,11 +34,7 @@ export default function WordFrequencyPlot({
         setIsPlotting(false);
       }
     } else {
-      if (
-        plottedDataRef.current &&
-        plotData &&
-        plottedDataRef.current == plotData
-      ) {
+      if (analysisResRef.current && analysisResRef.current == analysisResult) {
         return;
       }
       setIsPlotting(true);
@@ -46,12 +45,12 @@ export default function WordFrequencyPlot({
             return { word, f };
           });
         setPlotData(array);
-        plottedDataRef.current = array;
+        analysisResRef.current = analysisResult;
         setIsPlotting(false);
         clearTimeout(timeout);
       }, 2000);
     }
-  }, [analysisResult, plotData]);
+  }, [analysisResult]);
 
   useEffect(() => {}, [isPlotting, isAnalysing, file]);
 
