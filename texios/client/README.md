@@ -1,73 +1,80 @@
-# React + TypeScript + Vite
+# Texios Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web application for text analysis and visualization, built with React, TypeScript, and WebAssembly.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Text Analysis**: Analyze text files using a high-performance Rust-based WebAssembly engine
+- **Word Frequency Analysis**: Generate detailed word frequency statistics
+- **Interactive Visualization**: View word frequency data through interactive bar charts
+- **File Support**: Process various text file formats
+- **Real-time Statistics**: Get instant character count and word count metrics
 
-## React Compiler
+## Technical Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend**: React + TypeScript + Vite
+- **Core Analysis Engine**: Rust + WebAssembly
+- **Data Visualization**: Recharts
+- **Styling**: Tailwind CSS + shadcn/ui
 
-## Expanding the ESLint configuration
+## Architecture
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The application consists of two main parts:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. **Rust Analysis Engine**:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+   - Uses regex for word pattern matching
+   - Processes text to generate word frequencies and positions
+   - Compiles to WebAssembly for browser execution
+   - Provides statistics like word count and character count
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+2. **React Frontend**:
+   - File selection and handling interface
+   - Real-time analysis results display
+   - Interactive data visualization
+   - Custom hooks for file analysis state management
+
+## Getting Started
+
+1. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+2. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+3. Build for production:
+   ```bash
+   npm run build
+   ```
+
+## Project Structure
+
+```
+src/
+├── components/        # React components
+│   ├── FileSelect    # File input handling
+│   └── WordFrequencyPlot  # Data visualization
+├── hooks/            # Custom React hooks
+│   └── UseFileAnalysis    # File analysis logic
+├── pkg/              # WebAssembly modules
+└── lib/             # Utility functions
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Future Enhancements
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Add support for more text analysis metrics, eg:
+  - skip-to-word in file
+  - user-based search term support
+  - etc.
+- Implement advanced visualization options including additional charts
+- Add export functionality for analysis results
+- Support for batch file processing
+- Add natural language processing features
+- Cloud file storage
+- Personalised interface
