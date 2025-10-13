@@ -1,4 +1,5 @@
 //import { Button } from "./components/ui/button";
+import { lazy, Suspense } from "react";
 import { CloudUpload, EllipsisVertical, File, X } from "lucide-react";
 import {
   Card,
@@ -11,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useEffect, useState } from "react";
 import { FileSelect } from "./components/FileSelect";
-import { WordFrequencyPlot } from "./components/WordFrequencyPlot";
+const WordFrequencyPlot = lazy(() => import("./components/WordFrequencyPlot"));
 import { UseFileAnalysis } from "./hooks/UseFileAnalysis";
 import { cn } from "./lib/utils";
 
@@ -43,10 +44,12 @@ function App() {
       </Card>
       {/* Graphs */}
       {analysisResult && (
-        <div className="w-full lg:flex-3/5 2xl:flex-1/2 flex flex-col max-h-full items-center lg:items-end flex-grow p-2 md:p-5 bg-gray-100 rounded-2xl">
+        <div className="w-full lg:flex-3/5 2xl:flex-1/2 flex flex-col min-h-3/5 max-h-full items-center lg:items-end flex-grow p-2 md:p-5 bg-gray-100 rounded-2xl">
           <h3 className="font-semibold text-2xl self-center p-3">Your Plots</h3>
           <div className="w-full overflow-y-scroll flex flex-col items-center lg:items-end flex-grow gap-5 p-2 md:p-5">
-            <WordFrequencyPlot chartType="bar" />
+            <Suspense fallback={<></>}>
+              <WordFrequencyPlot chartType="bar" />
+            </Suspense>
           </div>
         </div>
       )}

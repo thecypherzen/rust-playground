@@ -13,7 +13,7 @@ import { Spinner } from "./ui/spinner";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { cn } from "@/lib/utils";
 
-export function WordFrequencyPlot({
+export default function WordFrequencyPlot({
   chartType = "bar",
   plotLimit = 7,
 }: WordFPlotPropsType) {
