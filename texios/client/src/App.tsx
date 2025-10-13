@@ -26,7 +26,7 @@ function App() {
         "m-auto flex min-h-screen lg:h-screen flex-col lg:flex-row items-center justify-center lg:items-start p-3 w-full md:max-w-4/5  gap-6 lg:max-w-[1400px]"
       )}
     >
-      <Card className="w-full lg:flex-2/5 2xl:flex-1/2 shadow-none gap-2 flex-grow lg:max-w-[600px]">
+      <Card className="w-full lg:flex-2/5 2xl:flex-1/2 shadow-none gap-2 lg:max-w-[600px] lg:flex-grow">
         <CardHeader className="border-b-1 border-gray-200 flex gap-3 items-center pt-2 pb-3">
           <div className="rounded-full h-full w-auto aspect-square p-2 flex flex-col items-center justify-center border-1 border-neutral-200">
             <CloudUpload />
@@ -38,7 +38,7 @@ function App() {
             </CardDescription>
           </div>
         </CardHeader>
-        <CardContent className="flex flex-col gap-4 border-0 border-neutral-300 flex-1 pt-5">
+        <CardContent className="flex flex-col gap-4 pt-5">
           <FileSelect />
         </CardContent>
       </Card>
